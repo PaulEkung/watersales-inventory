@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+
+</style>
+</head>
+<body>
+{% include "header.html" %}
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<section>
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3"></div>
+
+            <div class="col-md-6">
+                
+                <center>
+
+                    <form action="" method="POST" class="shadow-lg p-5 bg-white w-75 rounded-3" id="update-form">
+                        <h3 class="text-info fw-bolder fs-2"> Update Your Profile 
+                        </h3>
+                        <br>
+                        {% csrf_token %}
+
+                        {% for message in messages %}
+                    
+                    <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show w-100 p-4" role="alert">
+                        {{message}}
+                        
+                    </div>
+                    {% endfor %}
+                        
+                        <div class="form-floating">
+                            <input type="text" class="form-control is-invalid" id="floatingInputInvalidFirst" placeholder="Firstname" name="firstname" value="{{ first }}" required>
+                            <label for="floatingInputInvalid">Firstname</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control is-invalid" id="floatingInputInvalidLast" placeholder="Lastname" name="lastname" value="{{ second }} {{ third }}" required>
+                            <label for="floatingInputInvalid">Lastname</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="email" class="form-control is-invalid" id="floatingInputInvalidEmail" placeholder="Email Address" name="email" value="{{ user.staff_email }}" required>
+                            <label for="floatingInputInvalid">Email Address</label>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <input type="tel" class="form-control is-invalid" id="floatingInputInvalidPhone" placeholder="Phone Number" name="phone" value="{{ user.staff_phone }}" required>
+                            <label for="floatingInputInvalid">Phone Number</label>
+                        </div>
+                        <br>
+                        <label for="role" class="float-start">Select Role</label>
+                        <select class="form-select form-control form-control-lg p-3" aria-label="Default select example" name="role" required>
+                            <option selected value="{{ user.staff_role }}">{{ user.staff_role }}</option>
+                            
+                            <option value="Salesperson">Saleperson</option>
+                            <option value="Cashier">Cashier</option>
+                            
+                            
+                        </select>
+                        
+                        <br>
+ 
+ 
+                        <button type="submit" class="btn btn-info w-100 p-4" value="Create Account">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-dark" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block fs-5' id='trigger'>Update Profile</span> 
+                            </button>
+                    </form>
+                    
+                </center>
+                    
+            </div>
+
+            <div class="col-md-3"></div>
+
+
+        </div>
+
+
+    </div>
+
+    
+
+   </section>
+
+
+<script>
+document.getElementById("floatingInputInvalidFirst").addEventListener('input', function(){
+       const input = this;
+       if(input.value.length > 2){
+        input.className = 'form-control is-valid';
+       } else{
+        input.className = 'form-control is-invalid';
+       }
+    });
+
+document.getElementById("floatingInputInvalidLast").addEventListener('input', function(){
+       const input = this;
+       if(input.value.length > 2){
+        input.className = 'form-control is-valid';
+       } else{
+        input.className = 'form-control is-invalid';
+       }
+    });
+
+document.getElementById("floatingInputInvalidPhone").addEventListener('input', function(){
+    const input = this;
+    // Nigerian phone: 11 digits starting with 0 OR 13 digits starting with +234
+    const phoneRegex = /^(0\d{10}|\+234\d{10})$/;
+    if (phoneRegex.test(input.value.trim())) {
+        input.className = 'form-control is-valid';
+    } else {
+        input.className = 'form-control is-invalid';
+    }
+});
+
+const emailInput = document.getElementById('floatingInputInvalidEmail');
+
+emailInput.addEventListener('input', () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //const emailRegex = /^[a-zA-Z0-9.]+@([a-z.]*[a-z]+)$/;
+    const isValid = emailRegex.test(emailInput.value);
+
+    if (isValid) {
+        emailInput.classList.remove('is-invalid');
+        emailInput.classList.add('is-valid');
+    } else {
+        emailInput.classList.remove('is-valid');
+        emailInput.classList.add('is-invalid');   
+
+    }
+});
+
+ document.getElementById("exampleFormControlTextarea").addEventListener('input', function(){
+       const input = this;
+       if(input.value.length > 3){
+        input.className = 'form-control is-valid';
+       } else{
+        input.className = 'form-control is-invalid';
+       }
+    });
+ 
+        document.getElementById('update-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 5000);
+});
+    </script>
+</body>
+</html>

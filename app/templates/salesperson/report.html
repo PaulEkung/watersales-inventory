@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+</style>
+</head>
+<body>
+{% include 'header.html' %}
+<br>
+<br>
+<br>
+<br>
+    <div class="container mt-5">
+    <h2 class="mb-4">Sales Report 
+        {% if report_type == 'monthly' %}
+            for {{ month }}/{{ year }}
+        {% elif report_type == 'annual' %}
+            for {{ year }}
+        {% endif %}
+    </h2>
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Sales</h5>
+                    <p class="card-text fs-4">{{ total_sales }}</p>
+                </div>
+            </div>
+            </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Amount</h5>
+                    <p class="card-text fs-4">&#8358;{{ total_amount|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Quantity</h5>
+                    <p class="card-text fs-4">{{ total_quantity }}</p>
+                </div>
+            </div>
+            </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Total Amount</th>
+                    <th>Sale Date</th>
+                    <th>Delivery Address</th>
+                </tr>
+                <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ sale.customer.customer_name }}</td>
+                    <td>{{ sale.product.product_name }}</td>
+                    <td>{{ sale.quantity_sold }}</td>
+                    <td>&#8358;{{ sale.total_amount|floatformat:2 }}</td>
+                    <td>{{ sale.sale_date }}</td>
+                    <td>{{ sale.delivery_address }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No sales found for this period.</td>
+                </tr>
+                {% endfor %}
+                 </tbody>
+        </table>
+    </div>
+    <a href="{% url 'salesperson' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+</div>
+<br>
+<br>
+<br>
+<br>
+<center>
+
+    <button class="btn btn-outline-primary w-25 bi bi-printer" onclick="window.print()">
+        Print report page
+    </button>  
+</center>
+  
+</body>
+</html>

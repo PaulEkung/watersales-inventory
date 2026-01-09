@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <style type="text/css" media="all">
+    *{
+        margin : 0;
+        padding : 0;
+        box-sizing : border-box;
+        font: 15px "Century Gothic", "Times Roman";
+        
+
+    }
+    
+    </style>
+</head>
+<body class="bg-light">
+    {% include 'header.html' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+<!-- This section below is for form -->
+   <section>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3"> 
+               
+                  <a href="{% url 'customer' %}">Back to home</a> 
+            </div>
+            <center>
+            <div class="col-md-6">
+                
+                
+                <form action="" method="POST" class="shadow-lg p-5 w-75 rounded-3 bg-white" autocomplete="off" id="login-form">
+                    <h3 class="fw-bolder fs-4 bg-secondary-subtle p-3 rounded-3">
+                        Make New Order
+
+                    </h3>
+                    <p class="bg-warning-subtle p-2 rounded-2">
+                        We have <b>{{ watersum }} </b> bags of pure water and <b>{{ bottle }} </b> pallets of bottle water currently available.
+                        The price for a bag of pure water is: <b>₦{{ pure_water_price }}</b>  and a pallet of bottle water is ₦<b>{{ bottle_water_price }}</b> 
+                    </p>
+                        
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+
+                        <div class="alert alert-{{message.tags}} alert-success text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                         {% else %}
+                         <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                    {% endif %}
+                    {% endfor %}
+                        
+                        <select class="form-select form-control form-control-lg p-3" aria-label="Default select example" name="name" required>
+                            <option selected disabled>Select Product</option>
+                            <option value="Polyunwana Bottle Water">Polyunwana Bottle Water</option>
+                            <option value="Polyunwana Pure Water">Polyunwana Pure Water</option>
+                            
+                        </select>
+                        <br>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="quantity" value="{{ request.POST.quantity|default_if_none:'' }}" required>
+                            <label for="floatingInputInvalid">Quantity</label>
+                        </div>
+                        <hr>
+                        <h3>Card Details
+                            <span>
+                                <img src="{% static 'images/master.jpg' %}" width="50" alt="">
+                                <img src="{% static 'images/visa.jpg' %}" width="40" alt="">
+                                <img src="{% static 'images/verve.jpg' %}" width="60" alt="">
+                            </span>
+                        </h3>
+                        <hr>
+                       <div class="form-floating">
+                        <input type="text" class="form-control" name="card_number" value="{{ request.POST.card_number|default_if_none:'' }}" maxlength="16" required>
+                        <label for="floatingInputInvalid">Enter Card Number <span class="text-danger">*</span> </label>
+                       </div>
+                        <br>
+                       <div class="form-floating">
+                        <input type="text" class="form-control" name="card_name" value="{{ request.POST.card_name|default_if_none:'' }}" maxlength="50" required>
+                        <label for="floatingInputInvalid">Name on Card (Exactly as it appears) <span class="text-danger">*</span> </label>
+                       </div>
+                        <br>
+                        <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="expiry" class="float-start">Expiry Date</label>
+                            <input type="date" class="form-control form-control-lg" name="expiry" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="expiry" class="float-start">CVV</label>
+                            <input type="text" class="form-control form-control-lg" placeholder='xxx'  name="cvv" maxlength ='3' required>
+                        </div>
+                        </div>
+                        <br>
+                        <div class="form-floating">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="exampleFormControlTextarea" name="delivery_address" placeholder="Delivery address" rows="4" value="{{ request.POST.delivery_address|default_if_none:'' }}"></textarea>
+                                
+                            </div>
+                        </div>
+                        <br>
+                        
+                        <button type="submit" class="btn btn-info p-3 w-100">
+                            <span id="spinner" class="d-none" role="status">
+                                <span class="spinner-border fs-6 text-center text-dark"></span>
+                                <span class="fw-bold fs-5">Processing Order...</span>
+                            </span>
+                               <span class='d-block fs-5 fw-bold' id='trigger'>Add Order</span> 
+                            </button>
+                        
+                        
+                    </form>
+                </center>
+                    
+
+                       
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+
+
+    </div>
+ </section>
+<script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 8000);
+});
+
+    
+    </script>
+
+    
+</body>
+</html>

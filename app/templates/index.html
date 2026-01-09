@@ -1,0 +1,289 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/dist/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/aos-master/css/style.css' %}">
+
+
+    <style type="text/css" media="all">
+    *{
+        margin : 0;
+        padding : 0;
+        box-sizing : border-box;
+        font: 15px "Century Gothic", "Times Roman";
+        
+
+    }
+    .background{
+    background: url("{% static 'images/bottle.jpg' %}") no-repeat center center fixed;
+    background-color: rgba(0, 0, 0, 0.73);
+    background-blend-mode: darken;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: fixed;
+}
+
+.carousel-inner{
+            width: 100%;
+            margin: 0;
+            /* margin-top: -40px; */
+            
+        }
+    .carousel-item{
+            height: 50vh;
+            width: 100%;
+        }
+
+        .carousel-control-prev:hover{
+            background:  #6b1e1e30;
+        }
+        
+        .carousel-control-next:hover{
+            background:  #6b1e1e30;
+        }
+    
+    </style>
+</head>
+<body class="bg-light">
+    {% include 'header.html' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <section class="p-5 background" style="background-color: rgba(0, 0, 0, 0.731);">
+    
+    <div id="slides" class="carousel slide " data-bs-ride="carousel">
+       <div class="carousel-indicators">
+       <button type="button" data-bs-target="#slides" data-bs-slide-to="0" class="active bg-primary"></button>
+       <button type="button" data-bs-target="#slides" data-bs-slide-to="1" class="bg-primary"></button>
+       <button type="button" data-bs-target="#slides" data-bs-slide-to="2" class="bg-primary"></button>
+       </div>
+               
+    <br>
+    <div class="carousel-inner bg-transparent">
+        <div class="carousel-item active">
+            <div class="container">
+                <div class="container">
+                    <br>
+                    <br>
+                    <br>
+                    <center>
+                        <h1 class="d-block w-100 text-warning fw-bold fs-1 lead">
+                            We have {{ watersum }} bags of pure water!
+                            </h1>
+                            <p class="text-light lead end-100">
+                                We trust you will enjoy our products.
+                                 We'll be launching a promo to our top customers with the highest purchase every month
+                                
+                            </p>
+                        </div>
+                    </div>
+                </center>
+                
+            </div> 
+            <div class="carousel-item ">
+                <br>
+                <br>
+                <br>
+                <br>
+                
+                <center>
+                    <h1 class="d-block w-100 text-danger fw-bold fs-1 lead">
+                                Everything you need about your quality water is here!
+                            </h1>
+                            <div class="container">
+                                <div class="container">
+                                    
+                                    
+                                    <p class="text-light lead">
+                                        We ensure your greatest satisfaction.
+                                        
+                                    </p>
+                                </div>
+                            </div>
+                        </center>
+                        
+                        
+                    </div>
+                    <div class="carousel-item "> 
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        <center>
+                            <h1 class="d-block w-100 text-primary fw-bold fs-1 lead">
+                                We have {{ bottle }} pallets of bottle waterbr
+                            </h1>
+                            <br>
+                            
+                            <div class="container">
+                    <div class="container">
+                        
+                        
+                        <p class="text-light lead">
+                            Make your order, recieve delivery, and enjoy!
+                        </p>
+                    </div>
+                </div>
+            </center>
+            
+        </div>
+        
+        <!-- <button class="carousel-control-prev" data-bs-target="#slides" data-bs-slide="prev"
+            type="button">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                <span class="visually-hidden">prev</span>
+            </button>
+            <button class="carousel-control-next" data-bs-target="#slides" data-bs-slide="next"
+                type="button">
+                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                <span class="visually-hidden">next</span>
+            </button> -->
+            </div>
+            </div>
+            </section>
+            <br>
+            <br>
+    
+<!-- This section below is for form -->
+   <section>
+
+    <div class="container aos-all" id="transcroller-body">
+
+        <div class="row">
+
+            <div class="col-md-3"> 
+               
+                   
+            </div>
+            <center>
+            <div class="col-md-6 aos-item" data-aos="zoom-out">
+                
+                
+                <form action="" method="POST" class="shadow-lg p-5 w-75 rounded-3 bg-white" autocomplete="off" id="login-form">
+                    <h3 class="text-info fw-bolder fs-2">
+                        <img src="{% static 'images/user.png' %}" alt="icon" width="70px">
+
+                    </h3>
+                        <br>
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+
+                        <div class="alert alert-{{message.tags}} alert-success text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                         {% else %}
+                         <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                    {% endif %}
+                    {% endfor %}
+                        
+                        <div class="form-floating">
+                            <input type="email" class="form-control is-invalid" id="floatingInputInvalidEmail" placeholder="example@example.com" name="email" value="{{ request.POST.email|default_if_none:'' }}">
+                            <label for="floatingInputInvalid">Provide Email Address</label>
+                        </div>
+                        <br>
+                       <div class="form-floating">
+                        <input type="password" class="form-control is-invalid" id="floatingInputInvalidPwd" placeholder="name@example.com" name="password">
+                        <label for="floatingInputInvalid">Provide Password</label>
+                       </div>
+                        <br>
+                        <button type="submit" class="btn btn-info p-3 w-100">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-dark" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block fs-5 fw-bold' id='trigger'>Login</span> 
+                            </button>
+                        
+                        <hr class="w-100">
+                        <!-- <br> -->
+                         <p>
+                           <a href="#">
+                            Forgotten password?
+                           </a>
+                         </p>
+                    
+                        <p class="float-start offset-1">Don't have an account yet? <a href="{% url 'signup' %}">Sign Up</a></p>
+                    </form>
+                </center>
+                    
+
+                       
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+
+
+    </div>
+ </section>
+<script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 5000);
+});
+
+    const emailInput = document.getElementById('floatingInputInvalidEmail');
+
+emailInput.addEventListener('input', function(){
+    const emailRegex = /^[a-zA-Z0-9.]+@([a-z.]*[a-z]+)$/;
+    //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(emailInput.value);
+
+    if (isValid) {
+        emailInput.classList.remove('is-invalid');
+        emailInput.classList.add('is-valid');
+    } else {
+        emailInput.classList.remove('is-valid');
+        emailInput.classList.add('is-invalid');   
+
+    }
+});
+
+document.getElementById("floatingInputInvalidPwd").addEventListener('input', function(){
+       const input = this;
+       if(input.value.length >= 6){
+        input.className = 'form-control is-valid';
+       } else{
+        input.className = 'form-control is-invalid';
+       }
+    });
+</script>
+<script src="{% static 'app/aos-master/dist/aos.js' %}"></script>
+    <script>
+      AOS.init({
+        easing: 'ease-in-out-sine'
+      });
+    </script>
+<script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.bundle.js' %}"></script>
+<script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script src="{% static 'app/node_modules/bootstrap/dist/js/bootstrap.min.js' %}"></script> 
+<br>
+<br>
+</body>
+</html>

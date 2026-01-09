@@ -1,0 +1,204 @@
+{% load static %}
+{% load dict_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+.main{
+    margin-left: 320px;
+   width: 900px;
+}
+#profile{
+    display: none;
+}
+
+#orders{
+    display: block;
+}
+
+</style>
+</head>
+<body>
+    {% include 'header.html' %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                 {% include './sidenav.html' %}
+            </div>
+
+            <div class="col-md-8 main">
+                 <div class="container bg-light p-5 rounded-3 position-relative">
+                    <div class="container">
+                        <span class="fw-semibold bi bi-person-circle fs-2 text-black bg-light-subtle p-4 rounded-3"> Dashboard</span>
+                    </div>
+                    <br>
+                    <br>
+                    <h2>Welcome, {{ user.customer_name }}</h2>
+                    <p>Here you can make orders and manage your profile effectively.</p>
+                </div>
+                <br>
+
+                <div class="container" id="orders">
+                    <h3 class="fw-bold">
+                        Your Orders
+                        <a href="{% url 'orders' %}" class="float-end btn btn-primary bi bi-plus-circle-dotted"> New order</a>
+                    </h3>
+                    <div class="container">
+                        {% if orders %}
+                        <br>
+                        {% for order in orders %}
+                        <div class="card shadow-lg p-5">
+                            <div class="row">
+                               
+                                
+                                <div class="col-md-12">
+                                    <div class="card-header">
+                                    <h3 class="fw-bold">Order for <b class="text-warning fs-3"> {{ order.product.product_name }} </b> </h3>
+                                    </div>
+                                    <br>
+
+        <ul class="nav flex-column bg-light-subtle p-5 rounded-4">
+      <li class="nav-item mb-1 p-1">
+         <h5 class="fw-bold">
+            Date Ordered
+            <span class="float-end">
+                {% if order.delivery_status == 'Delivered' %}
+                                    <p class="bg-success-subtle p-3 rounded-3">Product Delivered</p>
+                                    {% else %}
+                                    <p class="bg-warning-subtle p-3 rounded-3">Pending Delivery</p>
+                                    {% endif %}
+            </span>
+
+         </h5>
+         <p>{{ order.sale_date }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h5 class="fw-bold">Destination</h5>
+         <p>{{ order.delivery_address }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h5 class="fw-bold">Quantity Demanded</h5>
+         <p>{{ order.quantity_sold }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h5 class="fw-bold">Total Amount Paid</h5>
+         <p>₦{{ order.total_amount }}</p>
+      </li>
+      <li class="nav-item mb-0 p-1">
+         <h5 class="fw-bold">Payment Status</h5>
+         <p class="text-success bi bi-check-all">{{ order.payment_status }}</p>
+      </li>
+     
+      
+      
+      
+   </ul>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        
+                        {% else %}
+                        <br>
+                        <br>
+                        <p class="bg-warning-subtle p-3 rounded-3">You do not have any orders made</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="container p-4 shadow" id="profile">
+                    <div class="card border border-info border-2 p-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{% static 'images/user.png' %}" width="70px" alt="">
+                                    <br>
+                                    <br>
+                                    <a href="{% url 'update_profile' user.customer_id %}" class="btn btn-secondary bi bi-pencil-square"> Update profile</a>
+                                </div>
+                                <div class="col-md-9">
+        <ul class="nav flex-column bg-light-subtle p-5 rounded-4">
+      <li class="nav-item mb-1 p-2">
+         <h4 class="fw-bold">Username</h4>
+         <p>{{ user.customer_name }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Email</h4>
+         <p>{{ user.customer_email }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Phone Number</h4>
+         <p>{{ user.customer_phone }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Home Address</h4>
+         <p>{{ user.customer_address }}</p>
+      </li>
+     
+      
+      
+      
+   </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+            </div>         
+        </div>
+    </div>
+   
+<script>
+    function openProfileContainer(){
+      document.getElementById('profile').style.display = 'block';
+      document.getElementById('orders').style.display='none';
+      
+    }
+    function openOrdersContainer(){
+    document.getElementById('orders').style.display='block';
+    document.getElementById('profile').style.display='none';  
+    
+    }
+
+
+        document.getElementById('product-r-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 5000);
+});
+    
+</script>
+    
+</body>
+</html>

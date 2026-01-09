@@ -1,0 +1,394 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+.main{
+    margin-left: 320px;
+   width: 900px;
+}
+#stocks{
+    display: none;
+}
+#staffs{
+    display: none;
+}
+#orders{
+    display: none;
+}
+#profile{
+    display: none;
+}
+
+</style>
+</head>
+<body>
+    {% include 'header.html' %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                 {% include './sidenav.html' %}
+            </div>
+
+            <div class="col-md-8 main">
+                 <div class="container bg-light p-5 rounded-3 position-relative">
+                    <div class="container">
+                        <span class="fw-semibold bi bi-person-circle fs-2 text-black bg-light-subtle p-4 rounded-3"> Dashboard</span>
+                    </div>
+                    <br>
+                    <br>
+                    <h2>Welcome to the Manager Dashboard</h2>
+                    <p>Here you can manage your operations effectively.</p>
+                </div>
+                <br>
+                <div class="container" id="customers">
+                    <h3>Customers</h3>
+                    {% if customers %}
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                <th class="fw-bold">Image</th>
+                                <th class="fw-bold w-25">Username</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Phone</th>
+                                <th class="fw-bold">Home Address</th>
+                            </thead>
+                        </tr>
+                        {% for customer in customers %}
+                        <tr>
+                            <tbody>
+                                <td>
+                                    <center>
+
+                                        <img src="{% static 'images/user.png' %}" width="50px" alt="icon">
+                                    </center>
+                                </td>
+                                <td>
+                                    {{ customer.customer_name }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_email }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_phone }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_address }}
+                                </td>
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    <p class="bg-warning-subtle p-4">
+                        No customer available yet!
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container" id="stocks">
+                    {% if stocks %}
+                    <h3>Stocks
+
+                        <a href="{% url 'add_stock' %}" class="btn btn-info float-end">Add Stock</a>
+                    </h3>
+                <br>
+                
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Id</th>
+                                <th class="fw-bold">Stock Name</th>
+                                <th class="fw-bold">Price Per Bag/Pallet</th>
+                                <th class="fw-bold">Available Quantity</th>
+                                <th class="fw-bold">Action</th>
+                                
+                            </thead>
+                        </tr>
+                        {% for stock in stocks %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    
+                                    {{ stock.product_name }}
+                                </td>
+                                <td>
+                                   ₦ {{ stock.product_price }}
+                                </td>
+                                <td>
+                                    {% if stock.product_name == 'Polyunwana Bottle Water' %}
+
+                                    {{ stock.stock_quantity }} Pallets
+                                    {% else %}
+                                    {{ stock.stock_quantity }} Bags
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'update_stock' stock.product_id %}" class="btn btn-dark bi bi-pencil"> Update</a>
+                                </td>
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    <p class="bg-warning-subtle p-4 rounded-3 lead fw-bold">
+                        No stock available yet!
+                        <a href="{% url 'add_stock' %}" class="btn btn-info float-end bi bi-plus-circle"> Add Stock</a>
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container" id="staffs">
+                    <h3>Staffs</h3>
+                    {% if staffs %}
+                    
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Id</th>
+                                <th class="fw-bold">Name</th>
+                                <th class="fw-bold">Role</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Phone</th>
+                                <th class="fw-bold">Action</th>
+                                
+                            </thead>
+                        </tr>
+                        {% for staff in staffs %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    
+                                    {{ staff.staff_name }}
+                                </td>
+                                <td>
+                                    {{ staff.staff_role }}
+                                    <br>
+                                    <br>
+                                    {% if staff.staff_role == 'Manager' %}
+                                    <p class="bg-info-subtle p-1 rounded-2 text-center fw-bold">Self</p>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ staff.staff_email }}
+                                </td>
+                                <td>
+                                    {{ staff.staff_phone }}
+                                </td>
+                                <td>
+                                    {% if staff.staff_role == 'Manager' %}
+                                    <p class="bg-info-danger p-1 rounded-2 text-center fw-bold">Not Required</p>
+                                    
+                                    {% else %}
+                                    <a href="#" class="bi bi-trash btn btn-danger offset-1"> Delete</a>
+                                    {% endif %}
+                                    
+                                </td>
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    
+                    {% endif %}
+                </div>
+                <div class="container" id="orders">
+                    <h3>Orders</h3>
+                    {% if orders %}
+                    
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Id</th>
+                                <th class="fw-bold">Product</th>
+                                <th class="fw-bold">Date</th>
+                                <th class="fw-bold">Quantity</th>
+                                <th class="fw-bold">Total</th>
+                                <th class="fw-bold">Buyer</th>
+                                <th class="fw-bold">Payment</th>
+                                <th class="fw-bold">Delivery</th>
+                                
+                            </thead>
+                        </tr>
+                        {% for order in orders %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    
+                                    {{ order.product.product_name }}
+                                </td>
+                                <td>
+                                    {{ order.sale_date }}
+                                    
+                                </td>
+                                <td>
+                                    {{ order.quantity_sold }}
+                                </td>
+                                <td>
+                                    {{ order.total_amount }}
+                                </td>
+                                <td>
+                                    {{ order.customer.customer_name }}
+                                    
+                                </td>
+                                <td>
+                                    {{ order.payment_status }}
+                                    
+                                </td>
+                                <td>
+                                    <p>
+
+                                        {{ order.delivery_status }}
+                                    </p>
+                                    
+                                    
+                                </td>
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    
+                        <p class="bg-warning-subtle p-4 rounded-3 lead fw-bold">
+                        No orders have been made!
+                        
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container p-4 shadow" id="profile">
+                    <div class="card border border-info border-2 p-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{% static 'images/user.png' %}" width="70px" alt="">
+                                    <br>
+                                    <br>
+                                    <a href="{% url 'update_manager_profile' manager.staff_id %}" class="btn btn-secondary bi bi-pencil-square"> Update profile</a>
+                                </div>
+                                <div class="col-md-9">
+        <ul class="nav flex-column bg-light-subtle p-5 rounded-4">
+      <li class="nav-item mb-1 p-2">
+         <h4 class="fw-bold">Username</h4>
+         <p>{{ manager.staff_name }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Email</h4>
+         <p>{{ manager.staff_email }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Phone Number</h4>
+         <p>{{ manager.staff_phone }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Staff Role</h4>
+         <p>{{ manager.staff_role }}</p>
+      </li>
+     
+      
+      
+      
+   </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+
+            </div>
+               
+        </div>
+    </div>
+   
+<script>
+    function openStockContainer(){
+      document.getElementById('stocks').style.display = 'block';
+      document.getElementById('customers').style.display='none';
+      document.getElementById('staffs').style.display='none';
+      document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+      
+    }
+    function openCustomerContainer(){
+    document.getElementById('customers').style.display='block';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('staffs').style.display='none';
+    document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+
+    
+    }
+    function openStaffContainer(){
+    document.getElementById('staffs').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+
+
+    }
+    function openOrdersContainer(){
+    document.getElementById('orders').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('staffs').style.display='none';
+      document.getElementById('profile').style.display='none';
+
+    }
+    function openProfileContainer(){
+        document.getElementById('profile').style.display='block';
+    document.getElementById('orders').style.display='none';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('staffs').style.display='none';
+    }
+</script>
+    
+</body>
+</html>

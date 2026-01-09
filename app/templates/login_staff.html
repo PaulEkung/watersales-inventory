@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+
+    <style type="text/css" media="all">
+    *{
+        margin : 0;
+        padding : 0;
+        box-sizing : border-box;
+        font: 15px "Century Gothic", "Times Roman";
+        
+
+    }
+    
+    </style>
+</head>
+<body class="bg-light">
+    {% include 'header.html' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+<!-- This section below is for form -->
+   <section>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-3"> 
+               
+                   
+            </div>
+            <center>
+            <div class="col-md-6">
+                
+                
+                <form action="" method="POST" class="shadow-lg p-5 w-75 rounded-3 bg-white" autocomplete="off" id="login-form">
+                    <h3 class="text-dark float-start fw-bolder fs-2">
+                        Login
+                    </h3>
+                    <br>
+                    <br>
+                        <br>
+                        {% csrf_token %}
+                        {% for message in messages %}
+                        {% if message.tags == 'success' %}
+
+                        <div class="alert alert-{{message.tags}} alert-success text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                         {% else %}
+                         <div class="alert alert-{{message.tags}} alert-danger text-center alert-dismissible fade show p-4 w-100" role="alert">
+                            {{message}}
+                            
+                         </div>
+                    {% endif %}
+                    {% endfor %}
+                        
+                        <div class="form-floating">
+                            <input type="email" class="form-control is-invalid" id="floatingInputInvalidEmail" placeholder="example@example.com" name="email" value="{{ request.POST.email|default_if_none:'' }}">
+                            <label for="floatingInputInvalid">Provide Email Address</label>
+                        </div>
+                        <br>
+                       <div class="form-floating">
+                        <input type="password" class="form-control is-invalid" id="floatingInputInvalidPwd" placeholder="name@example.com" name="password">
+                        <label for="floatingInputInvalid">Provide Password</label>
+                       </div>
+                        <br>
+                        <button type="submit" class="btn btn-dark p-3 w-100">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-light" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block fs-5 fw-bold' id='trigger'>Login</span> 
+                            </button>
+                        
+                        <hr class="w-100">
+                        <!-- <br> -->
+                         <p>
+                           <a href="#">
+                            Forgotten password?
+                           </a>
+                         </p>
+                    
+                        <p class="float-start offset-1">Don't have an account yet? <a href="{% url 'create_staff' %}">Sign Up</a></p>
+                    </form>
+                </center>
+                    
+
+                       
+            </div>
+            <div class="col-md-3"></div>
+
+        </div>
+
+
+    </div>
+ </section>
+<script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 5000);
+});
+
+    const emailInput = document.getElementById('floatingInputInvalidEmail');
+
+emailInput.addEventListener('input', function(){
+    const emailRegex = /^[a-zA-Z0-9.]+@([a-z.]*[a-z]+)$/;
+    //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(emailInput.value);
+
+    if (isValid) {
+        emailInput.classList.remove('is-invalid');
+        emailInput.classList.add('is-valid');
+    } else {
+        emailInput.classList.remove('is-valid');
+        emailInput.classList.add('is-invalid');   
+
+    }
+});
+
+document.getElementById("floatingInputInvalidPwd").addEventListener('input', function(){
+       const input = this;
+       if(input.value.length >= 6){
+        input.className = 'form-control is-valid';
+       } else{
+        input.className = 'form-control is-invalid';
+       }
+    });
+    </script>
+
+    
+</body>
+</html>

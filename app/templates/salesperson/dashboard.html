@@ -1,0 +1,405 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'app/node_modules/bootstrap-icons/bootstrap-icons.css' %}">
+    <style type="text/css" media="all">
+*{
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 15px "Century Gothic", "Times Roman", sans-serif;
+
+}
+.main{
+    margin-left: 320px;
+   width: 900px;
+}
+#stocks{
+    display: none;
+}
+
+#orders{
+    display: none;
+}
+#profile{
+    display: none;
+}
+#report{
+    display: none;
+}
+</style>
+</head>
+<body>
+    {% include 'header.html' %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                 {% include './sidenav.html' %}
+            </div>
+
+            <div class="col-md-8 main">
+                 <div class="container bg-light p-5 rounded-3 position-relative">
+                    <div class="container">
+                        <span class="fw-semibold bi bi-person-circle fs-2 text-black bg-light-subtle p-4 rounded-3"> Dashboard</span>
+                    </div>
+                    <br>
+                    <br>
+                    <h2>Welcome, {{ salesman.staff_name }}</h2>
+                    
+                </div>
+                <br>
+                <div class="container" id="customers">
+                    <h3>Customers</h3>
+                    {% if customers %}
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                <th class="fw-bold">Image</th>
+                                <th class="fw-bold w-25">Username</th>
+                                <th class="fw-bold">Email</th>
+                                <th class="fw-bold">Phone</th>
+                                <th class="fw-bold">Home Address</th>
+                            </thead>
+                        </tr>
+                        {% for customer in customers %}
+                        <tr>
+                            <tbody>
+                                <td>
+                                    <center>
+
+                                        <img src="{% static 'images/user.png' %}" width="50px" alt="icon">
+                                    </center>
+                                </td>
+                                <td>
+                                    {{ customer.customer_name }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_email }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_phone }}
+                                </td>
+                                <td>
+                                    {{ customer.customer_address }}
+                                </td>
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    <p class="bg-warning-subtle p-4">
+                        No customer available yet!
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container" id="stocks">
+                    <h3>Stocks</h3>
+                    {% if stocks %}
+                    
+                    <br>
+
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Id</th>
+                                <th class="fw-bold">Stock Name</th>
+                                <th class="fw-bold">Price Per Bag/Pallet</th>
+                                <th class="fw-bold">Available Quantity</th>
+                                
+                                
+                            </thead>
+                        </tr>
+                        {% for stock in stocks %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    
+                                    {{ stock.product_name }}
+                                </td>
+                                <td>
+                                   ₦ {{ stock.product_price }}
+                                </td>
+                                <td>
+                                    {% if stock.product_name == 'Polyunwana Bottle Water' %}
+
+                                    {{ stock.stock_quantity }} Pallets
+                                    {% else %}
+                                    {{ stock.stock_quantity }} Bags
+                                    {% endif %}
+                                </td>
+                               
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    <p class="bg-warning-subtle p-4 rounded-3 lead fw-bold">
+                        No stock available yet!
+                        
+                    </p>
+                    {% endif %}
+                </div>
+
+                
+                <div class="container" id="orders">
+                    <h3>Orders</h3>
+                    {% if orders %}
+                    
+                    <p class="bg-info-subtle p-3 rounded-3">Clicking the "Delivered" button will mark a particular order as delivered. This confirms that the customer has recieved the product</p>
+                    <table class="table table-responsive table-responsive-lg table-bordered">
+                        <tr>
+                            <thead>
+                                
+                                <th class="fw-bold">Id</th>
+                                <th class="fw-bold">Product</th>
+                                <th class="fw-bold">Date</th>
+                                <th class="fw-bold">Quantity</th>
+                                <th class="fw-bold">Total</th>
+                                <th class="fw-bold">Buyer</th>
+                                <th class="fw-bold">Payment</th>
+                                <th class="fw-bold">Action</th>
+                                
+                            </thead>
+                        </tr>
+                        {% for order in orders %}
+                        <tr>
+                            <tbody>
+                                
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    
+                                    {{ order.product.product_name }}
+                                </td>
+                                <td>
+                                    {{ order.sale_date }}
+                                    
+                                </td>
+                                <td>
+                                    {{ order.quantity_sold }}
+                                </td>
+                                <td>
+                                    {{ order.total_amount }}
+                                </td>
+                                <td>
+                                    {{ order.customer.customer_name }}
+                                    
+                                </td>
+                                <td>
+                                    {{ order.payment_status }}
+                                    
+                                </td>
+                                <td>
+                                    
+                                    {% if order.delivery_status == 'Delivered' %}
+                                    <p class="text-success">Delivered</p>
+                                    {% else %}
+                                    <a href="{% url 'confirm_delivery' order.sale_id %}" class="btn btn-warning">Delivered</a>
+                                    {% endif %}
+                                    
+                                    
+                                </td>
+                                
+                            </tbody>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    {% else %}
+                    
+                        <p class="bg-warning-subtle p-4 rounded-3 lead fw-bold">
+                        No orders have been made!
+                        
+                    </p>
+                    {% endif %}
+                </div>
+
+                <div class="container p-4 shadow" id="profile">
+                    <div class="card border border-info border-2 p-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="{% static 'images/user.png' %}" width="70px" alt="">
+                                    <br>
+                                    <br>
+                                    <a href="{% url 'update_salesperson_profile' salesman.staff_id %}" class="btn btn-secondary bi bi-pencil-square"> Update profile</a>
+                                </div>
+                                <div class="col-md-9">
+        <ul class="nav flex-column bg-light-subtle p-5 rounded-4">
+      <li class="nav-item mb-1 p-2">
+         <h4 class="fw-bold">Username</h4>
+         <p>{{ salesman.staff_name }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Email</h4>
+         <p>{{ salesman.staff_email }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Phone Number</h4>
+         <p>{{ salesman.staff_phone }}</p>
+      </li>
+      <li class="nav-item mb-0 p-2">
+         <h4 class="fw-bold">Staff Role</h4>
+         <p>{{ salesman.staff_role }}</p>
+      </li>
+     
+      
+      
+      
+   </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+
+                <div class="container" id="report">
+                    <h3 class="text-center">Generate Sales Report</h3>
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            
+
+                            <form action="{% url 'generate_report' %}" method="post" class="p-5 shadow rounded-3 bg-white" id="report-form mt-5">
+                                {% csrf_token %}
+
+                                <select class="form-select form-control-lg p-3" aria-label="Default select example" name="report_type" required>
+                                    <option selected disabled class="fw-bold">Select Report Type</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="annual">Annual</option>
+
+                                </select>
+                                <br>
+                                <select class="form-select form-control-lg p-3" aria-label="Default select example" name="report_month">
+                                    <option selected disabled class="fw-bold">Select month/Period</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                    
+                                </select>
+                                <br>
+                                <input type="text" name="report_year" class="form-control form-control-lg p-3" placeholder="Enter year e.g 2025">
+                                <br>
+                                <button type="submit" class="btn btn-primary p-3 w-100">
+                            <span id="spinner" class="spinner-border d-none fs-5 text-center text-light" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </span>
+                               <span class='d-block bi bi-file-earmark-arrow-down-fill' id='trigger'> Generate Report</span> 
+                            </button>
+                               
+
+                            </form>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+
+                </div>
+
+            </div>         
+        </div>
+    </div>
+   
+
+            </div>
+               
+        </div>
+    </div>
+
+     
+<script>
+    function openStockContainer(){
+      document.getElementById('stocks').style.display = 'block';
+      document.getElementById('customers').style.display='none';
+      document.getElementById('orders').style.display='none';
+      document.getElementById('profile').style.display='none';
+      document.getElementById('report').style.display='none';
+      
+    }
+    function openCustomerContainer(){
+    document.getElementById('customers').style.display='block';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('orders').style.display='none';
+    document.getElementById('profile').style.display='none';
+    document.getElementById('report').style.display='none';
+    
+    }
+    
+    function openOrdersContainer(){
+    document.getElementById('orders').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('profile').style.display='none';
+    document.getElementById('report').style.display='none';
+    
+    }
+
+    function openProfileContainer(){
+    document.getElementById('profile').style.display='block';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('orders').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    document.getElementById('report').style.display='none';
+    }
+
+    function openReportContainer(){
+    document.getElementById('report').style.display='block';
+    document.getElementById('profile').style.display='none';
+    document.getElementById('customers').style.display='none';
+    document.getElementById('orders').style.display='none';
+    document.getElementById('stocks').style.display='none';
+    }
+
+    document.getElementById('report-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission
+    const spinner = document.getElementById('spinner');
+    const createAccountTxt = document.getElementById('trigger');
+    spinner.classList.remove('d-none'); // Show the spinner
+    createAccountTxt.classList.add('d-none')
+    // Simulate a delay for demonstration (replace with your actual form submission logic)
+    setTimeout(() => {
+        spinner.classList.add('d-none'); // Hide the spinner after 5 seconds
+         createAccountTxt.classList.remove('d-none')
+        // Submit the form after the delay
+       this.submit();
+    }, 5000);
+});
+
+
+    
+</script>
+    
+</body>
+</html>
